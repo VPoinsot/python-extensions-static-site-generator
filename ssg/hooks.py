@@ -1,6 +1,6 @@
-_callback: {}
+_callbacks: {}
 
-def register():
+def register(hook, order=0):
     def register_callback(func):
         _callback.setdefault(hook, {}).setdefault(hook, []).append(func)
         return func
@@ -8,12 +8,12 @@ def register():
 
 
 def event(hook, *args):
-    for order in sorted(_callback.get(hook, {})):
+    for order in sorted(_callbacks.get(hook, {})):
         for func in _callback[hook][order]:
             func(*args)
 
 def filter(hook, value, *args):
-    for order in sorted(_callback.get(hook, {})):
-        for func in _callback[hook][order]:
+    for order in sorted(_callbacks.get(hook, {})):
+        for func in _callbacks[hook][order]:
             value = func(*args)
     return value
